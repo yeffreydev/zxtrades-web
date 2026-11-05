@@ -1,27 +1,48 @@
 ---
-title: Bienvenido al blog de ZXTrades
-summary: Arrancamos el blog diario. Qué vas a encontrar aquí cada día y cómo unirte gratis a la comunidad en Telegram.
+title: Bienvenido a la comunidad ZXTrades
+summary: Abrimos la comunidad gratuita en Telegram. Señales, análisis, contexto del mercado y mucho más, todo en un solo lugar.
 pubDate: 2026-11-05
-tags: [Comunidad]
+tags: [Comunidad, Señales]
 ---
 
 Hola trader 👋
 
-Este es el **blog diario de ZXTrades**. Aquí vamos a publicar, día a día, lo que vemos en el mercado y lo que vamos aprendiendo operando.
+Bienvenido a **ZXTrades**. Hoy abrimos oficialmente nuestra comunidad gratuita en Telegram y este blog, donde vamos a publicar a diario lo que vemos en el mercado.
 
-## Qué vas a encontrar aquí
+La idea es simple: que no operes solo. Compartimos cómo leemos el mercado y por qué tomamos cada operación, para que aprendas a decidir por ti mismo.
 
-- **Análisis del día:** niveles clave y el contexto que estamos vigilando.
-- **Ideas operativas:** setups con su plan completo: entrada, stop, objetivo y riesgo.
-- **Revisión de operaciones:** lo que salió bien, lo que salió mal y por qué.
-- **Lecciones rápidas:** conceptos de estrategia, gestión de riesgo y mentalidad.
+## Qué vas a encontrar en la comunidad
 
-## Únete a la comunidad (gratis)
+- **Señales:** ideas de entrada con su plan completo: activo, dirección, entrada, stop loss y take profit.
+- **Análisis:** niveles clave, estructura del mercado y las zonas que estamos vigilando.
+- **Contexto:** noticias y datos macro que pueden mover el precio, y en qué sesión conviene estar atento.
+- **Gestión de riesgo:** cuánto arriesgar, dónde va el stop y cuándo es mejor no operar.
+- **Revisión de operaciones:** lo que salió bien, lo que salió mal y qué aprendimos.
+- **Y más:** lecciones rápidas, dudas resueltas y conversación con otros traders.
 
-La conversación del día a día está en nuestro grupo de Telegram: alertas, dudas y análisis en tiempo real. Es **gratis**.
+## Cómo usar las señales
+
+Una señal no es una orden. Es una idea con su contexto. Antes de tomarla:
+
+1. **Entiende el porqué:** lee el análisis y el contexto que la acompañan.
+2. **Respeta el stop loss:** cada señal lleva su stop. No lo muevas para "aguantar".
+3. **Ajusta el tamaño a tu cuenta:** arriesga un porcentaje pequeño, idealmente 1% o menos por operación.
+4. **Si llegas tarde, déjala pasar:** si el precio ya se fue de la entrada, habrá otra oportunidad.
+
+## Únete gratis
+
+Todo pasa en nuestro grupo de Telegram. Entrar es **gratis**.
 
 👉 [Entrar a la comunidad en Telegram](https://t.me/zxtradesxau)
 
+Y aquí en el blog publicaremos cada día el análisis y el contexto con más detalle.
+
 > Recuerda: no operar también es una posición.
 
+Nos vemos dentro.
+
 — Equipo ZXTrades
+
+---
+
+*Aviso: el contenido de ZXTrades, incluidas las señales, es educativo y no constituye asesoría financiera. Operar en los mercados conlleva riesgo de pérdida de capital. Opera solo con dinero que puedas permitirte perder.*
