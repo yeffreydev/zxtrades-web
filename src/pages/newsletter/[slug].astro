@@ -1,0 +1,123 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import SubscribeForm from '../../components/SubscribeForm.astro';
+
+export async function getStaticPaths() {
+  const issues = (await getCollection('newsletter')).sort((a, b) => a.data.issue - b.data.issue);
+  return issues.map((issue, i) => ({
+    params: { slug: issue.id },
+    props: { issue, prev: issues[i - 1], next: issues[i + 1] },
+  }));
+}
+
+const { issue, prev, next } = Astro.props;
+const { Content } = await render(issue);
+const { title, summary, pubDate, tags } = issue.data;
+---
+
+<Layout title={`${title} — ZX Weekly`} description={summary}>
+  <article>
+    <header class="page-hero">
+      <div class="container">
+        <a href="/newsletter" class="back">← Todas las ediciones</a>
+        <div class="meta">
+          <span class="mono">Edición #{String(issue.data.issue).padStart(3, '0')}</span>
+          <span>·</span>
+          <time datetime={pubDate.toISOString()}>
+            {pubDate.toLocaleDateString('es', { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' })}
+          </time>
+        </div>
+        <h1>{title}</h1>
+        <div class="tags">{tags.map((t) => <span class="tag">{t}</span>)}</div>
+      </div>
+    </header>
+
+    <div class="container prose">
+      <Content />
+    </div>
+
+    <nav class="container pager">
+      {prev ? <a href={`/newsletter/${prev.id}`}>← {prev.data.title}</a> : <span></span>}
+      {next && <a href={`/newsletter/${next.id}`} class="right">{next.data.title} →</a>}
+    </nav>
+
+    <section class="container">
+      <div class="card cta">
+        <div>
+          <h3>¿Te gustó esta edición?</h3>
+          <p>Recibe la próxima directo en tu inbox.</p>
+        </div>
+        <SubscribeForm />
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .back {
+    display: inline-block;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+  .meta {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  .mono {
+    font-family: var(--font-mono);
+  }
+  .tags {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: center;
+  }
+  h1 {
+    max-width: 20ch;
+    margin-inline: auto;
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 72ch;
+    margin: 4rem auto 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.95rem;
+  }
+  .pager a {
+    color: var(--muted);
+  }
+  .pager a:hover {
+    color: var(--green);
+  }
+  .right {
+    text-align: right;
+  }
+  .cta {
+    max-width: 72ch;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .cta:hover {
+    transform: none;
+  }
+  .cta h3 {
+    margin: 0 0 0.3rem;
+  }
+  .cta p {
+    margin: 0;
+    color: var(--muted);
+  }
+</style>

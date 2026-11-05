@@ -1,0 +1,64 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const guides = await getCollection('guias');
+  return guides.map((guide) => ({ params: { slug: guide.id }, props: { guide } }));
+}
+
+const { guide } = Astro.props;
+const { Content } = await render(guide);
+const { title, description, level, category, readingTime, pubDate } = guide.data;
+---
+
+<Layout title={`${title} — ZXTrades`} description={description}>
+  <article>
+    <header class="page-hero">
+      <div class="container">
+        <a href="/recursos" class="back">← Volver a recursos</a>
+        <div class="meta">
+          <span class="tag">{category}</span>
+          <span>{level}</span>
+          <span>·</span>
+          <span>{readingTime} min</span>
+          <span>·</span>
+          <time datetime={pubDate.toISOString()}>
+            {pubDate.toLocaleDateString('es', { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' })}
+          </time>
+        </div>
+        <h1>{title}</h1>
+        <p>{description}</p>
+      </div>
+    </header>
+    <div class="container prose">
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .back {
+    display: inline-block;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+  .back:hover {
+    color: var(--green);
+  }
+  .meta {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-bottom: 1.2rem;
+  }
+  h1 {
+    max-width: 18ch;
+    margin-inline: auto;
+  }
+</style>

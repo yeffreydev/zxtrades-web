@@ -1,0 +1,236 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import GuideCard from '../../components/GuideCard.astro';
+
+const guides = (await getCollection('guias')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const levels = ['Todas', 'Principiante', 'Intermedio', 'Avanzado'];
+
+const tools = [
+  { name: 'Calculadora de posición', desc: 'Calcula el tamaño exacto según tu riesgo.', icon: '⌗', href: '#calculadora' },
+  { name: 'Plantilla de diario', desc: 'Registra cada trade y encuentra tus patrones.', icon: '✎', href: '#' },
+  { name: 'Checklist pre-trade', desc: 'Las 8 preguntas antes de apretar el botón.', icon: '☑', href: '#' },
+];
+---
+
+<Layout title="Recursos — ZXTrades" description="Guías gratuitas de trading: gestión de riesgo, análisis técnico, psicología y backtesting.">
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Recursos gratis</span>
+      <h1>Aprende a operar <span class="grad-text">en serio</span></h1>
+      <p>Guías paso a paso, herramientas y plantillas. Todo lo que nos hubiera gustado tener cuando empezamos.</p>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="filters">
+      {levels.map((l, i) => (
+        <button class:list={['filter', { active: i === 0 }]} data-level-filter={l}>
+          {l}
+        </button>
+      ))}
+    </div>
+    <div class="grid" id="guides">
+      {guides.map((g) => <GuideCard guide={g} />)}
+    </div>
+  </section>
+
+  <section class="container section">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow">Herramientas</span>
+        <h2>Tu caja de <span class="grad-text">herramientas</span></h2>
+      </div>
+    </div>
+    <div class="tools">
+      {tools.map((t) => (
+        <a href={t.href} class="card tool">
+          <span class="icon">{t.icon}</span>
+          <div>
+            <h3>{t.name}</h3>
+            <p>{t.desc}</p>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div class="card calc" id="calculadora">
+      <div>
+        <span class="eyebrow">Calculadora</span>
+        <h3>Tamaño de posición</h3>
+        <p>Nunca arriesgues más de lo que planeaste.</p>
+      </div>
+      <form id="calc-form" class="calc-form">
+        <label>Capital ($)<input type="number" name="capital" value="5000" min="0" step="any" /></label>
+        <label>Riesgo (%)<input type="number" name="risk" value="1" min="0" step="0.1" /></label>
+        <label>Entrada<input type="number" name="entry" value="100" step="any" /></label>
+        <label>Stop loss<input type="number" name="stop" value="98" step="any" /></label>
+      </form>
+      <div class="result">
+        <div><small>Riesgo en $</small><b id="r-usd">$50.00</b></div>
+        <div><small>Tamaño de posición</small><b id="r-size" class="grad-text">25 u.</b></div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .filters {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+  .filter {
+    padding: 0.55rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  .filter.active {
+    background: var(--text);
+    color: var(--bg);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.4rem;
+  }
+  .grid > :global(.hidden) {
+    display: none;
+  }
+  .tools {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .tool {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    align-items: flex-start;
+  }
+  .tool h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+  }
+  .tool p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  .icon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(0, 229, 143, 0.1);
+    color: var(--green);
+    font-size: 1.3rem;
+  }
+  .calc {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 2rem;
+    padding: 2rem;
+    align-items: center;
+  }
+  .calc:hover {
+    transform: none;
+  }
+  .calc h3 {
+    font-size: 1.5rem;
+  }
+  .calc p {
+    color: var(--muted);
+    margin: 0;
+  }
+  .calc-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+  }
+  input {
+    padding: 0.7rem 0.9rem;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font: inherit;
+    font-size: 1rem;
+  }
+  input:focus {
+    outline: none;
+    border-color: var(--green);
+  }
+  .result {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .result small {
+    display: block;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  .result b {
+    font-family: var(--font-display);
+    font-size: 2rem;
+  }
+  @media (max-width: 980px) {
+    .grid,
+    .tools {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .calc {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 620px) {
+    .grid,
+    .tools {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const filters = document.querySelectorAll<HTMLButtonElement>('[data-level-filter]');
+  filters.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      filters.forEach((b) => b.classList.toggle('active', b === btn));
+      const lvl = btn.dataset.levelFilter;
+      document.querySelectorAll<HTMLElement>('#guides > [data-level]').forEach((c) => {
+        c.classList.toggle('hidden', lvl !== 'Todas' && c.dataset.level !== lvl);
+      });
+    }),
+  );
+
+  const form = document.getElementById('calc-form') as HTMLFormElement;
+  const calc = () => {
+    const d = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    const riskUsd = (Number(d.capital) * Number(d.risk)) / 100;
+    const dist = Math.abs(Number(d.entry) - Number(d.stop));
+    const size = dist > 0 ? riskUsd / dist : 0;
+    document.getElementById('r-usd')!.textContent = `$${riskUsd.toFixed(2)}`;
+    document.getElementById('r-size')!.textContent = `${size.toLocaleString('es', { maximumFractionDigits: 4 })} u.`;
+  };
+  form.addEventListener('input', calc);
+  calc();
+</script>

@@ -1,0 +1,56 @@
+---
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+
+<form class:list={['subscribe', { compact }]} data-subscribe>
+  <input type="email" name="email" placeholder="tu@email.com" required aria-label="Email" />
+  <button type="submit" class="btn btn-primary">Suscribirme</button>
+  <p class="msg" role="status" aria-live="polite"></p>
+</form>
+
+<style>
+  .subscribe {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    max-width: 480px;
+    position: relative;
+  }
+  input {
+    flex: 1 1 220px;
+    padding: 0.9rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(7, 11, 9, 0.6);
+    color: var(--text);
+    font: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus {
+    border-color: var(--green);
+  }
+  .msg {
+    flex-basis: 100%;
+    margin: 0.3rem 0 0 1rem;
+    font-size: 0.88rem;
+    color: var(--green);
+    min-height: 1.3em;
+  }
+</style>
+
+<script>
+  // Conecta aquí tu proveedor (Buttondown, ConvertKit, Beehiiv, Resend...).
+  document.querySelectorAll<HTMLFormElement>('[data-subscribe]').forEach((form) => {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = form.querySelector('.msg')!;
+      const email = new FormData(form).get('email');
+      msg.textContent = `¡Listo! Te enviamos la próxima edición a ${email} 🚀`;
+      form.reset();
+    });
+  });
+</script>

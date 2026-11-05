@@ -1,0 +1,474 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Ticker from '../components/Ticker.astro';
+import ProductCard from '../components/ProductCard.astro';
+import GuideCard from '../components/GuideCard.astro';
+import SubscribeForm from '../components/SubscribeForm.astro';
+import { products } from '../data/products';
+
+const featuredGuides = (await getCollection('guias', ({ data }) => data.featured))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+const issues = (await getCollection('newsletter')).sort((a, b) => b.data.issue - a.data.issue);
+const latest = issues[0];
+
+// Velas deterministas para el gráfico del hero
+let seed = 7;
+const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+let price = 120;
+const candles = Array.from({ length: 26 }, (_, i) => {
+  const open = price;
+  const drift = 1.6 + i * 0.05;
+  const close = open + (rand() - 0.38) * 9 + drift * 0.6;
+  const high = Math.max(open, close) + rand() * 5;
+  const low = Math.min(open, close) - rand() * 5;
+  price = close;
+  return { open, close, high, low };
+});
+const max = Math.max(...candles.map((c) => c.high));
+const min = Math.min(...candles.map((c) => c.low));
+const H = 260;
+const y = (v: number) => H - ((v - min) / (max - min)) * (H - 20) - 10;
+const fmt = (d: Date) => d.toLocaleDateString('es', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' });
+
+const pillars = [
+  { icon: '◎', title: 'Estrategia', text: 'Setups claros con reglas objetivas de entrada, stop y salida.' },
+  { icon: '⛨', title: 'Gestión de riesgo', text: 'Tamaño de posición, R:R y límites diarios para sobrevivir y crecer.' },
+  { icon: '◈', title: 'Mentalidad', text: 'Rutinas, diario y disciplina para operar sin emociones.' },
+  { icon: '⬡', title: 'Comunidad', text: 'Traders que comparten análisis, dudas y resultados reales.' },
+];
+---
+
+<Layout>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="glow"></div>
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <span class="eyebrow">Comunidad de trading · LATAM</span>
+        <h1>
+          Opera con <span class="grad-text">disciplina</span>,<br />no con suerte.
+        </h1>
+        <p class="lead">
+          ZXTrades es tu base para aprender a operar en serio: guías gratuitas, newsletter semanal con el mapa del mercado y
+          merch para los que viven el chart.
+        </p>
+        <div class="cta">
+          <a href="/recursos" class="btn btn-primary">Explorar guías →</a>
+          <a href="/shop" class="btn btn-ghost">Ver el shop</a>
+        </div>
+        <div class="stats">
+          <div><b>12K+</b><span>traders en la comunidad</span></div>
+          <div><b>{issues.length * 40}+</b><span>ediciones leídas / semana</span></div>
+          <div><b>1%</b><span>riesgo máximo por trade</span></div>
+        </div>
+      </div>
+
+      <div class="hero-chart card">
+        <div class="chart-head">
+          <div>
+            <span class="pair">ZX/USD</span>
+            <span class="tf">4H</span>
+          </div>
+          <span class="chg">▲ +18.42%</span>
+        </div>
+        <svg viewBox={`0 0 ${candles.length * 16} ${H}`} preserveAspectRatio="none" class="chart">
+          {[0.25, 0.5, 0.75].map((p) => (
+            <line x1="0" x2={candles.length * 16} y1={H * p} y2={H * p} stroke="#1f2e27" stroke-dasharray="3 5" />
+          ))}
+          {candles.map((c, i) => {
+            const up = c.close >= c.open;
+            const color = up ? '#00E58F' : '#FF4D6D';
+            const x = i * 16 + 8;
+            return (
+              <g class="candle" style={`animation-delay:${i * 45}ms`}>
+                <line x1={x} x2={x} y1={y(c.high)} y2={y(c.low)} stroke={color} stroke-width="1.5" />
+                <rect
+                  x={x - 4.5}
+                  width="9"
+                  y={y(Math.max(c.open, c.close))}
+                  height={Math.max(2, Math.abs(y(c.open) - y(c.close)))}
+                  fill={color}
+                  rx="1.5"
+                />
+              </g>
+            );
+          })}
+        </svg>
+        <div class="chart-foot">
+          <span>Entrada <b>1.00R</b></span>
+          <span>Stop <b class="red">−1R</b></span>
+          <span>Target <b class="green">+3R</b></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Ticker />
+
+  <!-- PILARES -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">El método ZX</span>
+          <h2>Cuatro pilares para <span class="grad-text">consistencia</span></h2>
+        </div>
+        <p>Nada de señales mágicas. Construimos traders que entienden lo que hacen y por qué lo hacen.</p>
+      </div>
+      <div class="pillars">
+        {pillars.map((p, i) => (
+          <div class="card pillar reveal" style={`transition-delay:${i * 80}ms`}>
+            <span class="icon">{p.icon}</span>
+            <h3>{p.title}</h3>
+            <p>{p.text}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- SHOP -->
+  <section class="section alt" id="shop">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">ZX Shop</span>
+          <h2>Merch para los que <span class="grad-text">viven el chart</span></h2>
+          <p>Ropa y accesorios para tu día a día y tu setup. Envíos a toda LATAM.</p>
+        </div>
+        <a href="/shop" class="btn btn-ghost">Ver todo el shop →</a>
+      </div>
+      <div class="grid-3">
+        {products.slice(0, 3).map((p) => (
+          <div class="reveal"><ProductCard product={p} /></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- RECURSOS -->
+  <section class="section" id="recursos">
+    <div class="container">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">Recursos gratis</span>
+          <h2>Guías para <span class="grad-text">subir de nivel</span></h2>
+          <p>Desde tu primera vela hasta backtesting avanzado. Todo gratis, sin humo.</p>
+        </div>
+        <a href="/recursos" class="btn btn-ghost">Todas las guías →</a>
+      </div>
+      <div class="grid-3">
+        {featuredGuides.map((g) => (
+          <div class="reveal"><GuideCard guide={g} /></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWSLETTER -->
+  <section class="section" id="newsletter">
+    <div class="container">
+      <div class="nl card reveal">
+        <div class="nl-copy">
+          <span class="eyebrow">ZX Weekly</span>
+          <h2>El mercado, resumido <span class="grad-text">cada domingo</span></h2>
+          <p>
+            Niveles clave, calendario macro, setup de la semana y una lección rápida. Directo a tu inbox, gratis.
+          </p>
+          <SubscribeForm />
+          <small>Sin spam. Cancela cuando quieras.</small>
+        </div>
+        {latest && (
+          <a href={`/newsletter/${latest.id}`} class="nl-preview">
+            <div class="mail-bar">
+              <span></span><span></span><span></span>
+              <em>Edición #{String(latest.data.issue).padStart(3, '0')}</em>
+            </div>
+            <div class="mail-body">
+              <small>{fmt(latest.data.pubDate)}</small>
+              <h3>{latest.data.title}</h3>
+              <p>{latest.data.summary}</p>
+              <div class="tags">
+                {latest.data.tags.map((t) => <span class="tag">{t}</span>)}
+              </div>
+              <span class="read">Leer edición →</span>
+            </div>
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    position: relative;
+    padding: 9rem 0 5rem;
+    overflow: hidden;
+  }
+  .glow {
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(0, 229, 143, 0.18), transparent 60%);
+    filter: blur(40px);
+    z-index: -1;
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  h1 {
+    font-size: clamp(2.8rem, 6.5vw, 5.2rem);
+    margin-bottom: 1.5rem;
+  }
+  .lead {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 50ch;
+    margin: 0 0 2rem;
+  }
+  .cta {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .stats {
+    display: flex;
+    gap: 2.5rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+  }
+  .stats b {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 2rem;
+  }
+  .stats span {
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .hero-chart {
+    padding: 1.4rem;
+    box-shadow: 0 40px 80px -30px rgba(0, 229, 143, 0.25);
+  }
+  .hero-chart:hover {
+    transform: none;
+  }
+  .chart-head,
+  .chart-foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+  .pair {
+    font-weight: 600;
+    margin-right: 0.6rem;
+  }
+  .tf {
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.1rem 0.5rem;
+    border-radius: 6px;
+  }
+  .chg {
+    color: var(--green);
+  }
+  .chart {
+    width: 100%;
+    height: 280px;
+    margin: 1rem 0;
+  }
+  .candle {
+    opacity: 0;
+    animation: rise 0.5s ease forwards;
+  }
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .chart-foot {
+    color: var(--muted);
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+  }
+  .chart-foot b {
+    color: var(--text);
+  }
+  .red {
+    color: var(--red) !important;
+  }
+  .green {
+    color: var(--green) !important;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.2rem;
+  }
+  .pillar {
+    padding: 1.8rem;
+  }
+  .icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(0, 229, 143, 0.1);
+    color: var(--green);
+    font-size: 1.4rem;
+    margin-bottom: 1.4rem;
+  }
+  .pillar h3 {
+    font-size: 1.2rem;
+  }
+  .pillar p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  .alt {
+    background: linear-gradient(180deg, transparent, rgba(0, 229, 143, 0.035), transparent);
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.4rem;
+  }
+  .grid-3 > div > :global(*) {
+    height: 100%;
+  }
+
+  .nl {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 3rem;
+    padding: 3.5rem;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(0, 229, 143, 0.14), transparent 50%),
+      radial-gradient(circle at 100% 100%, rgba(198, 255, 61, 0.08), transparent 50%),
+      var(--surface);
+  }
+  .nl:hover {
+    transform: none;
+  }
+  .nl h2 {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+  }
+  .nl-copy > p {
+    color: var(--muted);
+    margin: 0 0 1.8rem;
+  }
+  .nl-copy small {
+    color: var(--muted);
+    margin-left: 1rem;
+  }
+  .nl-preview {
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    overflow: hidden;
+    transform: rotate(1.5deg);
+    transition: transform 0.3s;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+    align-self: center;
+  }
+  .nl-preview:hover {
+    transform: rotate(0deg) translateY(-4px);
+  }
+  .mail-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface-2);
+  }
+  .mail-bar span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .mail-bar em {
+    margin-left: auto;
+    font-style: normal;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .mail-body {
+    padding: 1.6rem;
+  }
+  .mail-body small {
+    font-family: var(--font-mono);
+    color: var(--muted);
+    font-size: 0.78rem;
+  }
+  .mail-body h3 {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  .mail-body p {
+    color: var(--muted);
+  }
+  .tags {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 1.4rem;
+  }
+  .read {
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  @media (max-width: 980px) {
+    .hero-grid,
+    .nl {
+      grid-template-columns: 1fr;
+    }
+    .pillars {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .grid-3 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .nl {
+      padding: 2rem;
+    }
+  }
+  @media (max-width: 620px) {
+    .pillars,
+    .grid-3 {
+      grid-template-columns: 1fr;
+    }
+    .stats {
+      gap: 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  import { bindAddButtons } from '../scripts/cart';
+  bindAddButtons();
+</script>

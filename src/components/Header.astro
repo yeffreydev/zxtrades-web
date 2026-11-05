@@ -1,0 +1,209 @@
+---
+import Logo from './Logo.astro';
+
+const links = [
+  { href: '/', label: 'Inicio' },
+  { href: '/shop', label: 'Shop' },
+  { href: '/recursos', label: 'Recursos' },
+  { href: '/newsletter', label: 'Newsletter' },
+];
+const path = Astro.url.pathname;
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="header" id="site-header">
+  <div class="container inner">
+    <a href="/" aria-label="ZXTrades inicio"><Logo /></a>
+
+    <nav class="nav" id="nav">
+      {links.map((l) => (
+        <a href={l.href} class:list={[{ active: isActive(l.href) }]}>
+          {l.label}
+        </a>
+      ))}
+    </nav>
+
+    <div class="actions">
+      <a href="/shop#cart" class="cart-btn" aria-label="Carrito" data-cart-open>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" />
+        </svg>
+        <span class="cart-count" data-cart-count>0</span>
+      </a>
+      <a href="/newsletter#suscribirse" class="btn btn-primary join">Únete</a>
+      <button class="burger" id="burger" aria-label="Menú" aria-expanded="false">
+        <span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 50;
+    padding: 1rem 0;
+    transition:
+      background 0.3s,
+      padding 0.3s,
+      border-color 0.3s;
+    border-bottom: 1px solid transparent;
+  }
+  .header.scrolled {
+    background: rgba(7, 11, 9, 0.75);
+    backdrop-filter: blur(14px);
+    border-color: var(--border);
+    padding: 0.6rem 0;
+  }
+  .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .nav {
+    display: flex;
+    gap: 0.25rem;
+    padding: 0.35rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: rgba(17, 26, 22, 0.6);
+    backdrop-filter: blur(10px);
+  }
+  .nav a {
+    padding: 0.45rem 1rem;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    color: var(--muted);
+    transition:
+      color 0.2s,
+      background 0.2s;
+  }
+  .nav a:hover {
+    color: var(--text);
+  }
+  .nav a.active {
+    background: var(--surface-2);
+    color: var(--text);
+  }
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .cart-btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    color: var(--text);
+    transition: border-color 0.2s;
+  }
+  .cart-btn:hover {
+    border-color: var(--green);
+  }
+  .cart-count {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 999px;
+    background: var(--green);
+    color: #04120b;
+    font-size: 0.7rem;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+  }
+  .join {
+    padding: 0.6rem 1.1rem;
+  }
+  .burger {
+    display: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+  }
+  .burger span {
+    width: 16px;
+    height: 2px;
+    background: var(--text);
+    transition: transform 0.25s;
+  }
+  .burger[aria-expanded='true'] span:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+  .burger[aria-expanded='true'] span:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  @media (max-width: 820px) {
+    .burger {
+      display: flex;
+    }
+    .join {
+      display: none;
+    }
+    .nav {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      left: 1rem;
+      right: 1rem;
+      flex-direction: column;
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 0.6rem;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-8px);
+      transition:
+        opacity 0.2s,
+        transform 0.2s;
+    }
+    .nav.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: none;
+    }
+    .nav a {
+      padding: 0.8rem 1rem;
+    }
+  }
+</style>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 20);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  const burger = document.getElementById('burger')!;
+  const nav = document.getElementById('nav')!;
+  burger.addEventListener('click', () => {
+    const open = nav.classList.toggle('open');
+    burger.setAttribute('aria-expanded', String(open));
+  });
+
+  const updateCount = () => {
+    try {
+      const cart = JSON.parse(localStorage.getItem('zx-cart') || '[]') as { qty: number }[];
+      const n = cart.reduce((s, i) => s + i.qty, 0);
+      document.querySelectorAll('[data-cart-count]').forEach((el) => (el.textContent = String(n)));
+    } catch {}
+  };
+  updateCount();
+  window.addEventListener('cart:update', updateCount);
+</script>

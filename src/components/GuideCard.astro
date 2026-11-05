@@ -1,0 +1,75 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  guide: CollectionEntry<'guias'>;
+}
+const { guide } = Astro.props;
+const { title, description, level, category, readingTime } = guide.data;
+const levelColor = { Principiante: 'var(--green)', Intermedio: 'var(--lime)', Avanzado: 'var(--red)' }[level];
+---
+
+<a href={`/recursos/${guide.id}`} class="card guide" data-level={level}>
+  <div class="top">
+    <span class="tag">{category}</span>
+    <span class="level" style={`--c:${levelColor}`}>{level}</span>
+  </div>
+  <h3>{title}</h3>
+  <p>{description}</p>
+  <div class="foot">
+    <span>{readingTime} min de lectura</span>
+    <span class="arrow">→</span>
+  </div>
+</a>
+
+<style>
+  .guide {
+    display: flex;
+    flex-direction: column;
+    padding: 1.6rem;
+    min-height: 260px;
+  }
+  .top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  .level {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .level::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--c);
+  }
+  h3 {
+    font-size: 1.35rem;
+  }
+  p {
+    color: var(--muted);
+    margin: 0 0 1.5rem;
+    flex: 1;
+  }
+  .foot {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .arrow {
+    color: var(--green);
+    font-size: 1.1rem;
+    transition: transform 0.2s;
+  }
+  .guide:hover .arrow {
+    transform: translateX(4px);
+  }
+</style>
