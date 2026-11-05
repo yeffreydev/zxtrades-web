@@ -1,15 +1,21 @@
 :root {
-  --bg: #070b09;
-  --bg-2: #0c1310;
-  --surface: #111a16;
-  --surface-2: #16221d;
-  --border: #1f2e27;
-  --text: #e8f3ee;
-  --muted: #8ba398;
-  --green: #00e58f;
-  --lime: #c6ff3d;
+  /* Paleta ZX Track (igual que la app Kairos: lib/core/theme/app_colors.dart) */
+  --bg: #07050d;
+  --bg-2: #0c0916;
+  --surface: #120e1e;
+  --surface-2: #181327;
+  --border: #241d38;
+  --text: #f1eeff;
+  --muted: #a59dc2;
+  --primary: #8b3dff;
+  --primary-deep: #5b1fd1;
+  --brand: #b57bff;
+  --accent: #cdb0ff;
+  /* Semánticos: menta de las velas del logo para lo positivo. */
+  --green: #1fe5a8;
   --red: #ff4d6d;
-  --grad: linear-gradient(120deg, var(--green), var(--lime));
+  --lime: var(--accent);
+  --grad: linear-gradient(120deg, var(--primary-deep), var(--primary) 55%, var(--brand));
   --font-display: 'Space Grotesk', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -43,8 +49,8 @@ body::before {
   inset: 0;
   pointer-events: none;
   background-image:
-    linear-gradient(rgba(0, 229, 143, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 229, 143, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(139, 61, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139, 61, 255, 0.04) 1px, transparent 1px);
   background-size: 48px 48px;
   mask-image: radial-gradient(ellipse at top, #000 20%, transparent 70%);
   z-index: -1;
@@ -88,7 +94,7 @@ h4 {
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--green);
+  color: var(--brand);
   margin-bottom: 1rem;
 }
 
@@ -97,8 +103,8 @@ h4 {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: var(--green);
-  box-shadow: 0 0 12px var(--green);
+  background: var(--brand);
+  box-shadow: 0 0 12px var(--brand);
 }
 
 .section-head {
@@ -148,13 +154,13 @@ h4 {
 
 .btn-primary {
   background: var(--grad);
-  color: #04120b;
-  box-shadow: 0 10px 30px -10px rgba(0, 229, 143, 0.6);
+  color: #ffffff;
+  box-shadow: 0 10px 30px -10px rgba(139, 61, 255, 0.6);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 40px -12px rgba(0, 229, 143, 0.8);
+  box-shadow: 0 16px 40px -12px rgba(139, 61, 255, 0.8);
 }
 
 .btn-ghost {
@@ -164,8 +170,8 @@ h4 {
 }
 
 .btn-ghost:hover {
-  border-color: var(--green);
-  background: rgba(0, 229, 143, 0.06);
+  border-color: var(--brand);
+  background: rgba(139, 61, 255, 0.06);
 }
 
 .card {
@@ -179,7 +185,7 @@ h4 {
 
 .card:hover {
   transform: translateY(-4px);
-  border-color: rgba(0, 229, 143, 0.4);
+  border-color: rgba(139, 61, 255, 0.4);
 }
 
 .tag {
@@ -190,9 +196,9 @@ h4 {
   letter-spacing: 0.1em;
   padding: 0.25rem 0.6rem;
   border-radius: 999px;
-  background: rgba(0, 229, 143, 0.1);
-  color: var(--green);
-  border: 1px solid rgba(0, 229, 143, 0.25);
+  background: rgba(139, 61, 255, 0.1);
+  color: var(--brand);
+  border: 1px solid rgba(139, 61, 255, 0.25);
 }
 
 .page-hero {
@@ -229,11 +235,11 @@ h4 {
 
 .prose p,
 .prose li {
-  color: #c9dbd2;
+  color: #d9d2f0;
 }
 
 .prose a {
-  color: var(--green);
+  color: var(--brand);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -249,7 +255,7 @@ h4 {
 .prose blockquote {
   margin: 2rem 0;
   padding: 1rem 1.5rem;
-  border-left: 3px solid var(--green);
+  border-left: 3px solid var(--brand);
   background: var(--surface);
   border-radius: 0 12px 12px 0;
   color: var(--text);

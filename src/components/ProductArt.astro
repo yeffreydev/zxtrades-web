@@ -13,71 +13,71 @@ const grad = `url(#${g})`;
 <svg viewBox="0 0 200 200" fill="none" class="art" aria-hidden="true">
   <defs>
     <linearGradient id={g} x1="0" y1="1" x2="1" y2="0">
-      <stop offset="0" stop-color="#00E58F" />
-      <stop offset="1" stop-color="#C6FF3D" />
+      <stop offset="0" stop-color="#5B1FD1" />
+      <stop offset="1" stop-color="#B57BFF" />
     </linearGradient>
   </defs>
 
   {kind === 'tee' && (
     <g>
-      <path d="M70 40l-36 18 12 30 16-6v78h76V82l16 6 12-30-36-18c-4 10-16 16-30 16S74 50 70 40z" fill={color} stroke="#2a3b33" stroke-width="2" />
+      <path d="M70 40l-36 18 12 30 16-6v78h76V82l16 6 12-30-36-18c-4 10-16 16-30 16S74 50 70 40z" fill={color} stroke="#33294c" stroke-width="2" />
       <path d="M86 92h12l-10 18h12" stroke={grad} stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
       <path d="M106 110l10-18M110 92h6v6" stroke={grad} stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
       <g stroke-width="3">
-        <path d="M84 134v14M96 128v22M108 124v18M120 118v20" stroke="#00E58F" opacity=".5" />
+        <path d="M84 134v14M96 128v22M108 124v18M120 118v20" stroke="#1FE5A8" opacity=".5" />
       </g>
     </g>
   )}
 
   {kind === 'hoodie' && (
     <g>
-      <path d="M76 44c4-10 44-10 48 0l34 18 10 34-16 6v66H48v-66l-16-6 10-34z" fill={color} stroke="#2a3b33" stroke-width="2" />
-      <path d="M78 44c0 22 44 22 44 0" stroke="#2a3b33" stroke-width="2" />
-      <path d="M94 62v18M106 62v18" stroke="#3b5046" stroke-width="2" stroke-linecap="round" />
-      <rect x="74" y="130" width="52" height="24" rx="6" stroke="#2a3b33" stroke-width="2" />
+      <path d="M76 44c4-10 44-10 48 0l34 18 10 34-16 6v66H48v-66l-16-6 10-34z" fill={color} stroke="#33294c" stroke-width="2" />
+      <path d="M78 44c0 22 44 22 44 0" stroke="#33294c" stroke-width="2" />
+      <path d="M94 62v18M106 62v18" stroke="#4a3d6b" stroke-width="2" stroke-linecap="round" />
+      <rect x="74" y="130" width="52" height="24" rx="6" stroke="#33294c" stroke-width="2" />
       <path d="M90 92h8l-7 12h8M102 104l7-12M104 92h5v5" stroke={grad} stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
     </g>
   )}
 
   {kind === 'cap' && (
     <g>
-      <path d="M44 120c0-40 24-62 56-62s56 22 56 62z" fill={color} stroke="#2a3b33" stroke-width="2" />
-      <path d="M40 120h120c10 0 14 10 4 14-30 10-98 10-128 0-10-4-6-14 4-14z" fill="#16221d" stroke="#2a3b33" stroke-width="2" />
-      <path d="M100 58v62" stroke="#2a3b33" stroke-width="2" />
-      <circle cx="100" cy="58" r="4" fill="#2a3b33" />
+      <path d="M44 120c0-40 24-62 56-62s56 22 56 62z" fill={color} stroke="#33294c" stroke-width="2" />
+      <path d="M40 120h120c10 0 14 10 4 14-30 10-98 10-128 0-10-4-6-14 4-14z" fill="#181327" stroke="#33294c" stroke-width="2" />
+      <path d="M100 58v62" stroke="#33294c" stroke-width="2" />
+      <circle cx="100" cy="58" r="4" fill="#33294c" />
       <path d="M78 84h14l-11 20h14M100 104l11-20M104 84h7v7" stroke={grad} stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
     </g>
   )}
 
   {kind === 'mug' && (
     <g>
-      <path d="M140 80h12a18 18 0 0 1 0 36h-12" stroke="#cfdcd5" stroke-width="8" />
+      <path d="M140 80h12a18 18 0 0 1 0 36h-12" stroke="#dcd4f0" stroke-width="8" />
       <rect x="50" y="58" width="94" height="104" rx="12" fill={color} />
-      <ellipse cx="97" cy="60" rx="47" ry="6" fill="#cfdcd5" />
+      <ellipse cx="97" cy="60" rx="47" ry="6" fill="#dcd4f0" />
       <g stroke-width="5" stroke-linecap="round">
         <path d="M70 130v-18" stroke="#00b371" /><path d="M84 122v-24" stroke="#00b371" /><path d="M98 126v-14" stroke="#ff4d6d" /><path d="M112 112v-26" stroke="#00b371" /><path d="M126 100v-24" stroke="#00b371" />
       </g>
-      <text x="97" y="150" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#0a0f0d">ZXTRADES</text>
+      <text x="97" y="150" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#1a0d33">ZXTRADES</text>
     </g>
   )}
 
   {kind === 'mousepad' && (
     <g>
-      <rect x="18" y="62" width="164" height="80" rx="10" fill={color} stroke="#2a3b33" stroke-width="2" />
+      <rect x="18" y="62" width="164" height="80" rx="10" fill={color} stroke="#33294c" stroke-width="2" />
       <path d="M30 120l18-10 14 6 16-20 14 8 18-24 14 10 16-18 20 6" stroke={grad} stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-      <path d="M30 88h140M30 108h140" stroke="#2a3b33" stroke-dasharray="4 4" />
-      <text x="168" y="134" text-anchor="end" font-family="monospace" font-size="9" fill="#00E58F" opacity=".7">ZX/USD</text>
+      <path d="M30 88h140M30 108h140" stroke="#33294c" stroke-dasharray="4 4" />
+      <text x="168" y="134" text-anchor="end" font-family="monospace" font-size="9" fill="#B57BFF" opacity=".8">ZX/USD</text>
     </g>
   )}
 
   {kind === 'stickers' && (
     <g>
-      <rect x="40" y="46" width="70" height="70" rx="18" fill="#0a0f0d" stroke={grad} stroke-width="3" transform="rotate(-10 75 81)" />
+      <rect x="40" y="46" width="70" height="70" rx="18" fill="#1a0d33" stroke={grad} stroke-width="3" transform="rotate(-10 75 81)" />
       <path d="M58 70h18l-14 24h14M82 94l12-24M88 70h6v6" stroke={grad} stroke-width="4" stroke-linecap="round" stroke-linejoin="round" transform="rotate(-10 75 81)" />
-      <circle cx="140" cy="76" r="28" fill="#C6FF3D" />
-      <text x="140" y="81" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#0a0f0d">HODL</text>
-      <rect x="86" y="118" width="80" height="36" rx="18" fill="#00E58F" transform="rotate(6 126 136)" />
-      <text x="126" y="141" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#0a0f0d" transform="rotate(6 126 136)">1% RISK</text>
+      <circle cx="140" cy="76" r="28" fill="#CDB0FF" />
+      <text x="140" y="81" text-anchor="middle" font-family="monospace" font-size="12" font-weight="700" fill="#1a0d33">HODL</text>
+      <rect x="86" y="118" width="80" height="36" rx="18" fill="#8B3DFF" transform="rotate(6 126 136)" />
+      <text x="126" y="141" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#1a0d33" transform="rotate(6 126 136)">1% RISK</text>
       <path d="M48 140l10-14 10 8 14-20" stroke="#ff4d6d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
     </g>
   )}
