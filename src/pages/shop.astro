@@ -1,355 +1,83 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ProductCard from '../components/ProductCard.astro';
+import ProductArt from '../components/ProductArt.astro';
+import TelegramCTA from '../components/TelegramCTA.astro';
 import { products } from '../data/products';
 
-const categories = ['Todo', ...new Set(products.map((p) => p.category))];
+// Solo un adelanto visual: sin precios ni carrito hasta el lanzamiento.
+const teaser = products.slice(0, 3);
 ---
 
-<Layout title="Shop — ZXTrades" description="Merch oficial de ZXTrades: hoodies, tees, gorras y accesorios para tu setup.">
+<Layout title="Shop — Próximamente | ZXTrades" description="El merch oficial de ZXTrades llega pronto. Únete a Telegram para enterarte del lanzamiento.">
   <section class="page-hero">
     <div class="container">
       <span class="eyebrow">ZX Shop</span>
-      <h1>Merch <span class="grad-text">oficial</span></h1>
-      <p>Diseños para traders que se toman el mercado en serio. Calidad premium, envíos a toda LATAM.</p>
+      <h1>Merch oficial <span class="grad-text">próximamente</span></h1>
+      <p>Estamos preparando ropa y accesorios para los que viven el chart. Avisaremos del lanzamiento en la comunidad.</p>
+      <div class="sub"><TelegramCTA label="Avísame en Telegram" /></div>
     </div>
   </section>
 
-  <section class="container shop">
-    <div class="toolbar">
-      <div class="filters" role="tablist">
-        {categories.map((c, i) => (
-          <button class:list={['filter', { active: i === 0 }]} data-filter={c}>
-            {c}
-          </button>
-        ))}
-      </div>
-      <span class="promo">🎁 10% off con <code>ZXWEEKLY</code></span>
-    </div>
-
+  <section class="container">
     <div class="grid">
-      {products.map((p) => <ProductCard product={p} />)}
-    </div>
-
-    <div class="perks">
-      <div><b>🚚 Envío gratis</b><span>en pedidos mayores a $60</span></div>
-      <div><b>↺ 30 días</b><span>para cambios y devoluciones</span></div>
-      <div><b>🔒 Pago seguro</b><span>tarjeta, PayPal y cripto</span></div>
+      {teaser.map((p) => (
+        <div class="card item">
+          <span class="soon">Próximamente</span>
+          <div class="art"><ProductArt kind={p.kind} color={p.color} /></div>
+          <span class="cat">{p.category}</span>
+        </div>
+      ))}
     </div>
   </section>
-
-  <!-- Carrito -->
-  <div class="overlay" id="cart-overlay"></div>
-  <aside class="drawer" id="cart" aria-label="Carrito">
-    <div class="drawer-head">
-      <h3>Tu carrito</h3>
-      <button class="close" id="cart-close" aria-label="Cerrar">✕</button>
-    </div>
-    <ul class="items" id="cart-items"></ul>
-    <div class="empty" id="cart-empty">
-      <p>Tu carrito está vacío.</p>
-      <small>Agrega algo de merch y opera con estilo.</small>
-    </div>
-    <div class="drawer-foot">
-      <div class="row"><span>Subtotal</span><b id="cart-subtotal">$0</b></div>
-      <div class="row muted"><span>Envío</span><span id="cart-shipping">—</span></div>
-      <div class="row total"><span>Total</span><b id="cart-total">$0</b></div>
-      <button class="btn btn-primary checkout" id="checkout">Finalizar compra</button>
-    </div>
-  </aside>
-
-  <button class="fab" id="cart-fab" aria-label="Abrir carrito">
-    🛒 <span data-cart-count>0</span>
-  </button>
 </Layout>
 
 <style>
-  .shop {
-    padding-bottom: 4rem;
-  }
-  .toolbar {
+  .sub {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-bottom: 2rem;
-  }
-  .filters {
-    display: flex;
-    gap: 0.4rem;
-    flex-wrap: wrap;
-  }
-  .filter {
-    padding: 0.55rem 1.1rem;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    font: inherit;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .filter:hover {
-    color: var(--text);
-  }
-  .filter.active {
-    background: var(--text);
-    color: var(--bg);
-    border-color: var(--text);
-  }
-  .promo {
-    font-size: 0.9rem;
-    color: var(--muted);
-  }
-  .promo code {
-    font-family: var(--font-mono);
-    color: var(--lime);
+    justify-content: center;
+    margin-top: 2rem;
   }
   .grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 1.4rem;
   }
-  .grid > :global(.hidden) {
-    display: none;
+  .item {
+    position: relative;
+    padding: 1.4rem;
+    text-align: center;
   }
-  .perks {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-    margin-top: 3rem;
-  }
-  .perks div {
-    padding: 1.3rem 1.5rem;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    display: flex;
-    flex-direction: column;
-  }
-  .perks span {
-    color: var(--muted);
-    font-size: 0.88rem;
-  }
-
-  .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(4px);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s;
-    z-index: 80;
-  }
-  .drawer {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: min(420px, 100%);
-    background: var(--bg-2);
-    border-left: 1px solid var(--border);
-    z-index: 90;
-    transform: translateX(100%);
-    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-  }
-  :global(body.cart-open) .drawer {
+  .item:hover {
     transform: none;
   }
-  :global(body.cart-open) .overlay {
-    opacity: 1;
-    pointer-events: auto;
+  .art {
+    filter: blur(1.5px) saturate(0.8);
+    opacity: 0.75;
   }
-  .drawer-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.4rem 1.5rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .drawer-head h3 {
-    margin: 0;
-  }
-  .close {
-    background: none;
-    border: 0;
-    color: var(--muted);
-    font-size: 1.1rem;
-    cursor: pointer;
-  }
-  .items {
-    list-style: none;
-    margin: 0;
-    padding: 0.5rem 1.5rem;
-    flex: 1;
-    overflow-y: auto;
-  }
-  .items :global(li) {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .items :global(.name) {
+  .soon {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.3rem 0.65rem;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #1a0d33;
     font-weight: 600;
   }
-  .items :global(.unit) {
-    color: var(--muted);
-    font-size: 0.85rem;
+  .cat {
     font-family: var(--font-mono);
-  }
-  .items :global(.qty) {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-family: var(--font-mono);
-  }
-  .items :global(.qty button) {
-    width: 28px;
-    height: 28px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--text);
-    cursor: pointer;
-  }
-  .empty {
-    text-align: center;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
     color: var(--muted);
-    padding: 3rem 1.5rem;
-    display: none;
   }
-  .drawer-foot {
-    padding: 1.5rem;
-    border-top: 1px solid var(--border);
-  }
-  .row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.5rem;
-  }
-  .muted {
-    color: var(--muted);
-    font-size: 0.9rem;
-  }
-  .total {
-    font-size: 1.15rem;
-    padding-top: 0.6rem;
-    border-top: 1px dashed var(--border);
-    margin-top: 0.6rem;
-  }
-  .row b {
-    font-family: var(--font-mono);
-  }
-  .checkout {
-    width: 100%;
-    margin-top: 1rem;
-  }
-  .fab {
-    position: fixed;
-    right: 1.5rem;
-    bottom: 1.5rem;
-    z-index: 60;
-    padding: 0.9rem 1.3rem;
-    border-radius: 999px;
-    border: 0;
-    background: var(--grad);
-    color: #ffffff;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    box-shadow: 0 16px 40px -12px rgba(139, 61, 255, 0.7);
-  }
-
-  @media (max-width: 980px) {
+  @media (max-width: 760px) {
     .grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  @media (max-width: 620px) {
-    .grid,
-    .perks {
       grid-template-columns: 1fr;
     }
   }
 </style>
-
-<script>
-  import { bindAddButtons, changeQty, getCart } from '../scripts/cart';
-
-  const body = document.body;
-  const open = () => body.classList.add('cart-open');
-  const close = () => body.classList.remove('cart-open');
-
-  document.getElementById('cart-fab')!.addEventListener('click', open);
-  document.getElementById('cart-close')!.addEventListener('click', close);
-  document.getElementById('cart-overlay')!.addEventListener('click', close);
-  document.addEventListener('keydown', (e) => e.key === 'Escape' && close());
-  document.querySelectorAll('[data-cart-open]').forEach((el) =>
-    el.addEventListener('click', (e) => {
-      e.preventDefault();
-      open();
-    }),
-  );
-  if (location.hash === '#cart') open();
-
-  // Filtros
-  const filters = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
-  filters.forEach((btn) =>
-    btn.addEventListener('click', () => {
-      filters.forEach((b) => b.classList.toggle('active', b === btn));
-      const f = btn.dataset.filter;
-      document.querySelectorAll<HTMLElement>('.grid > [data-category]').forEach((card) => {
-        card.classList.toggle('hidden', f !== 'Todo' && card.dataset.category !== f);
-      });
-    }),
-  );
-
-  // Render del carrito
-  const list = document.getElementById('cart-items')!;
-  const empty = document.getElementById('cart-empty')!;
-  const money = (n: number) => `$${n.toFixed(2)}`;
-
-  function render() {
-    const cart = getCart();
-    list.innerHTML = '';
-    for (const item of cart) {
-      const li = document.createElement('li');
-      li.innerHTML = `
-        <div><div class="name"></div><div class="unit">${money(item.price)}</div></div>
-        <div class="qty">
-          <button data-d="-1" aria-label="Quitar uno">−</button>
-          <span>${item.qty}</span>
-          <button data-d="1" aria-label="Agregar uno">+</button>
-        </div>`;
-      li.querySelector('.name')!.textContent = item.name;
-      li.querySelectorAll<HTMLButtonElement>('button').forEach((b) =>
-        b.addEventListener('click', () => changeQty(item.id, Number(b.dataset.d))),
-      );
-      list.appendChild(li);
-    }
-    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-    const shipping = subtotal === 0 ? 0 : subtotal >= 60 ? 0 : 6;
-    empty.style.display = cart.length ? 'none' : 'block';
-    document.getElementById('cart-subtotal')!.textContent = money(subtotal);
-    document.getElementById('cart-shipping')!.textContent =
-      subtotal === 0 ? '—' : shipping === 0 ? 'Gratis' : money(shipping);
-    document.getElementById('cart-total')!.textContent = money(subtotal + shipping);
-  }
-
-  render();
-  window.addEventListener('cart:update', render);
-  bindAddButtons(open);
-
-  document.getElementById('checkout')!.addEventListener('click', () => {
-    // Conecta aquí tu checkout (Stripe, Shopify Buy Button, Lemon Squeezy...).
-    if (!getCart().length) return;
-    alert('Checkout de demo — conecta Stripe o Shopify para cobrar de verdad.');
-  });
-</script>

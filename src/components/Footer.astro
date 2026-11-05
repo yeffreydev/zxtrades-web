@@ -1,5 +1,6 @@
 ---
 import Logo from './Logo.astro';
+import { TELEGRAM_URL } from '../data/site';
 const year = new Date().getFullYear();
 ---
 
@@ -10,30 +11,24 @@ const year = new Date().getFullYear();
         <Logo size={40} />
         <p>Trading con disciplina. Estrategia, gestión de riesgo y mentalidad para operar en serio.</p>
         <div class="socials">
-          <a href="#" aria-label="X / Twitter">𝕏</a>
-          <a href="#" aria-label="Instagram">IG</a>
-          <a href="#" aria-label="YouTube">YT</a>
-          <a href="#" aria-label="Discord">DC</a>
+          <a href={TELEGRAM_URL} target="_blank" rel="noopener" aria-label="Telegram">TG</a>
         </div>
       </div>
       <div class="cols">
         <div>
           <h4>Explorar</h4>
-          <a href="/shop">Shop</a>
+          <a href="/blog">Blog</a>
           <a href="/recursos">Recursos</a>
-          <a href="/newsletter">Newsletter</a>
+          <a href="/shop">Shop (pronto)</a>
         </div>
         <div>
           <h4>Comunidad</h4>
-          <a href="#">Discord</a>
-          <a href="#">YouTube</a>
-          <a href="#">Contacto</a>
+          <a href={TELEGRAM_URL} target="_blank" rel="noopener">Telegram (gratis)</a>
         </div>
         <div>
           <h4>Legal</h4>
           <a href="#">Términos</a>
           <a href="#">Privacidad</a>
-          <a href="#">Envíos</a>
         </div>
       </div>
     </div>

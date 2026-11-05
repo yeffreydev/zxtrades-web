@@ -1,32 +1,31 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import SubscribeForm from '../../components/SubscribeForm.astro';
+import TelegramCTA from '../../components/TelegramCTA.astro';
+import { fmtDate, getPosts, readingTime } from '../../lib/blog';
 
 export async function getStaticPaths() {
-  const issues = (await getCollection('newsletter')).sort((a, b) => a.data.issue - b.data.issue);
-  return issues.map((issue, i) => ({
-    params: { slug: issue.id },
-    props: { issue, prev: issues[i - 1], next: issues[i + 1] },
+  const posts = await getPosts(); // más reciente primero
+  return posts.map((post, i) => ({
+    params: { slug: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
   }));
 }
 
-const { issue, prev, next } = Astro.props;
-const { Content } = await render(issue);
-const { title, summary, pubDate, tags } = issue.data;
+const { post, newer, older } = Astro.props;
+const { Content } = await render(post);
+const { title, summary, pubDate, tags } = post.data;
 ---
 
-<Layout title={`${title} — ZX Weekly`} description={summary}>
+<Layout title={`${title} — Blog ZXTrades`} description={summary}>
   <article>
     <header class="page-hero">
       <div class="container">
-        <a href="/newsletter" class="back">← Todas las ediciones</a>
+        <a href="/blog" class="back">← Todos los posts</a>
         <div class="meta">
-          <span class="mono">Edición #{String(issue.data.issue).padStart(3, '0')}</span>
+          <time datetime={pubDate.toISOString()}>{fmtDate(pubDate)}</time>
           <span>·</span>
-          <time datetime={pubDate.toISOString()}>
-            {pubDate.toLocaleDateString('es', { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' })}
-          </time>
+          <span class="mono">{readingTime(post.body)} min de lectura</span>
         </div>
         <h1>{title}</h1>
         <div class="tags">{tags.map((t) => <span class="tag">{t}</span>)}</div>
@@ -38,17 +37,17 @@ const { title, summary, pubDate, tags } = issue.data;
     </div>
 
     <nav class="container pager">
-      {prev ? <a href={`/newsletter/${prev.id}`}>← {prev.data.title}</a> : <span></span>}
-      {next && <a href={`/newsletter/${next.id}`} class="right">{next.data.title} →</a>}
+      {older ? <a href={`/blog/${older.id}`}>← {older.data.title}</a> : <span></span>}
+      {newer && <a href={`/blog/${newer.id}`} class="right">{newer.data.title} →</a>}
     </nav>
 
     <section class="container">
       <div class="card cta">
         <div>
-          <h3>¿Te gustó esta edición?</h3>
-          <p>Recibe la próxima directo en tu inbox.</p>
+          <h3>Sigue la conversación</h3>
+          <p>Análisis y alertas del día en nuestra comunidad gratuita de Telegram.</p>
         </div>
-        <SubscribeForm />
+        <TelegramCTA />
       </div>
     </section>
   </article>

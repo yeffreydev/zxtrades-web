@@ -1,0 +1,61 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostCard from '../../components/PostCard.astro';
+import TelegramCTA from '../../components/TelegramCTA.astro';
+import { getPosts } from '../../lib/blog';
+
+const posts = await getPosts();
+---
+
+<Layout
+  title="Blog diario — ZXTrades"
+  description="El blog diario de ZXTrades: análisis del mercado, ideas operativas, revisión de trades y lecciones de trading."
+>
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow">Blog diario</span>
+      <h1>Lo que vemos en el <span class="grad-text">mercado, cada día</span></h1>
+      <p>Análisis, ideas operativas con su gestión de riesgo, revisión de trades y lecciones rápidas.</p>
+      <div class="sub"><TelegramCTA label="Recibe los avisos en Telegram" /></div>
+    </div>
+  </section>
+
+  <section class="container">
+    {posts.length === 0 ? (
+      <p class="empty">Muy pronto el primer post. Mientras tanto, únete a la comunidad en Telegram.</p>
+    ) : (
+      <div class="grid">
+        {posts.map((p) => (
+          <PostCard post={p} />
+        ))}
+      </div>
+    )}
+  </section>
+</Layout>
+
+<style>
+  .sub {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.4rem;
+  }
+  .empty {
+    text-align: center;
+    color: var(--muted);
+  }
+  @media (max-width: 980px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 620px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

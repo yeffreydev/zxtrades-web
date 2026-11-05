@@ -2,16 +2,15 @@
 import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import Ticker from '../components/Ticker.astro';
-import ProductCard from '../components/ProductCard.astro';
 import GuideCard from '../components/GuideCard.astro';
-import SubscribeForm from '../components/SubscribeForm.astro';
-import { products } from '../data/products';
+import PostCard from '../components/PostCard.astro';
+import TelegramCTA from '../components/TelegramCTA.astro';
+import { getPosts } from '../lib/blog';
 
 const featuredGuides = (await getCollection('guias', ({ data }) => data.featured))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
-const issues = (await getCollection('newsletter')).sort((a, b) => b.data.issue - a.data.issue);
-const latest = issues[0];
+const posts = (await getPosts()).slice(0, 3);
 
 // Velas deterministas para el gráfico del hero
 let seed = 7;
@@ -30,7 +29,6 @@ const max = Math.max(...candles.map((c) => c.high));
 const min = Math.min(...candles.map((c) => c.low));
 const H = 260;
 const y = (v: number) => H - ((v - min) / (max - min)) * (H - 20) - 10;
-const fmt = (d: Date) => d.toLocaleDateString('es', { timeZone: 'UTC', day: 'numeric', month: 'short', year: 'numeric' });
 
 const pillars = [
   { icon: '◎', title: 'Estrategia', text: 'Setups claros con reglas objetivas de entrada, stop y salida.' },
@@ -51,16 +49,16 @@ const pillars = [
           Opera con <span class="grad-text">disciplina</span>,<br />no con suerte.
         </h1>
         <p class="lead">
-          ZXTrades es tu base para aprender a operar en serio: guías gratuitas, newsletter semanal con el mapa del mercado y
-          merch para los que viven el chart.
+          ZXTrades es tu base para aprender a operar en serio: un blog diario con lo que vemos en el mercado, guías
+          gratuitas y una comunidad gratis en Telegram.
         </p>
         <div class="cta">
-          <a href="/recursos" class="btn btn-primary">Explorar guías →</a>
-          <a href="/shop" class="btn btn-ghost">Ver el shop</a>
+          <TelegramCTA />
+          <a href="/blog" class="btn btn-ghost">Leer el blog →</a>
         </div>
         <div class="stats">
-          <div><b>12K+</b><span>traders en la comunidad</span></div>
-          <div><b>{issues.length * 40}+</b><span>ediciones leídas / semana</span></div>
+          <div><b>Gratis</b><span>comunidad en Telegram</span></div>
+          <div><b>Diario</b><span>análisis en el blog</span></div>
           <div><b>1%</b><span>riesgo máximo por trade</span></div>
         </div>
       </div>
@@ -129,20 +127,20 @@ const pillars = [
     </div>
   </section>
 
-  <!-- SHOP -->
-  <section class="section alt" id="shop">
+  <!-- BLOG -->
+  <section class="section alt" id="blog">
     <div class="container">
       <div class="section-head reveal">
         <div>
-          <span class="eyebrow">ZX Shop</span>
-          <h2>Merch para los que <span class="grad-text">viven el chart</span></h2>
-          <p>Ropa y accesorios para tu día a día y tu setup. Envíos a toda LATAM.</p>
+          <span class="eyebrow">Blog diario</span>
+          <h2>Lo que vemos en el <span class="grad-text">mercado, cada día</span></h2>
+          <p>Análisis, ideas operativas con su gestión de riesgo y revisión de trades.</p>
         </div>
-        <a href="/shop" class="btn btn-ghost">Ver todo el shop →</a>
+        <a href="/blog" class="btn btn-ghost">Ver todo el blog →</a>
       </div>
       <div class="grid-3">
-        {products.slice(0, 3).map((p) => (
-          <div class="reveal"><ProductCard product={p} /></div>
+        {posts.map((p) => (
+          <div class="reveal"><PostCard post={p} /></div>
         ))}
       </div>
     </div>
@@ -167,36 +165,24 @@ const pillars = [
     </div>
   </section>
 
-  <!-- NEWSLETTER -->
-  <section class="section" id="newsletter">
+  <!-- COMUNIDAD -->
+  <section class="section" id="comunidad">
     <div class="container">
       <div class="nl card reveal">
         <div class="nl-copy">
-          <span class="eyebrow">ZX Weekly</span>
-          <h2>El mercado, resumido <span class="grad-text">cada domingo</span></h2>
+          <span class="eyebrow">Comunidad gratis</span>
+          <h2>Opera acompañado en <span class="grad-text">Telegram</span></h2>
           <p>
-            Niveles clave, calendario macro, setup de la semana y una lección rápida. Directo a tu inbox, gratis.
+            Análisis del día, alertas, dudas y revisión de operaciones con otros traders. Entrar es gratis.
           </p>
-          <SubscribeForm />
-          <small>Sin spam. Cancela cuando quieras.</small>
+          <TelegramCTA size="lg" label="Entrar gratis a la comunidad" />
         </div>
-        {latest && (
-          <a href={`/newsletter/${latest.id}`} class="nl-preview">
-            <div class="mail-bar">
-              <span></span><span></span><span></span>
-              <em>Edición #{String(latest.data.issue).padStart(3, '0')}</em>
-            </div>
-            <div class="mail-body">
-              <small>{fmt(latest.data.pubDate)}</small>
-              <h3>{latest.data.title}</h3>
-              <p>{latest.data.summary}</p>
-              <div class="tags">
-                {latest.data.tags.map((t) => <span class="tag">{t}</span>)}
-              </div>
-              <span class="read">Leer edición →</span>
-            </div>
-          </a>
-        )}
+        <div class="soon-box">
+          <span class="eyebrow">ZX Shop</span>
+          <h3>Merch oficial <span class="grad-text">próximamente</span></h3>
+          <p>Ropa y accesorios para los que viven el chart. Anunciaremos el lanzamiento en la comunidad.</p>
+          <a href="/shop" class="read">Ver adelanto →</a>
+        </div>
       </div>
     </div>
   </section>
@@ -379,63 +365,18 @@ const pillars = [
     color: var(--muted);
     margin: 0 0 1.8rem;
   }
-  .nl-copy small {
-    color: var(--muted);
-    margin-left: 1rem;
-  }
-  .nl-preview {
-    border-radius: 16px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    overflow: hidden;
-    transform: rotate(1.5deg);
-    transition: transform 0.3s;
-    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+  .soon-box {
     align-self: center;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px dashed var(--border);
+    background: var(--bg);
   }
-  .nl-preview:hover {
-    transform: rotate(0deg) translateY(-4px);
+  .soon-box h3 {
+    font-size: 1.6rem;
   }
-  .mail-bar {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.8rem 1rem;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface-2);
-  }
-  .mail-bar span {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--border);
-  }
-  .mail-bar em {
-    margin-left: auto;
-    font-style: normal;
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
+  .soon-box p {
     color: var(--muted);
-  }
-  .mail-body {
-    padding: 1.6rem;
-  }
-  .mail-body small {
-    font-family: var(--font-mono);
-    color: var(--muted);
-    font-size: 0.78rem;
-  }
-  .mail-body h3 {
-    font-size: 1.5rem;
-    margin-top: 0.5rem;
-  }
-  .mail-body p {
-    color: var(--muted);
-  }
-  .tags {
-    display: flex;
-    gap: 0.4rem;
-    margin-bottom: 1.4rem;
   }
   .read {
     color: var(--brand);
@@ -468,7 +409,3 @@ const pillars = [
   }
 </style>
 
-<script>
-  import { bindAddButtons } from '../scripts/cart';
-  bindAddButtons();
-</script>

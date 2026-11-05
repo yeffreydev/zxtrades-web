@@ -1,11 +1,12 @@
 ---
 import Logo from './Logo.astro';
+import { TELEGRAM_URL } from '../data/site';
 
 const links = [
   { href: '/', label: 'Inicio' },
-  { href: '/shop', label: 'Shop' },
+  { href: '/blog', label: 'Blog' },
   { href: '/recursos', label: 'Recursos' },
-  { href: '/newsletter', label: 'Newsletter' },
+  { href: '/shop', label: 'Shop', badge: 'Pronto' },
 ];
 const path = Astro.url.pathname;
 const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
@@ -19,18 +20,14 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
       {links.map((l) => (
         <a href={l.href} class:list={[{ active: isActive(l.href) }]}>
           {l.label}
+          {l.badge && <span class="badge">{l.badge}</span>}
         </a>
       ))}
+      <a href={TELEGRAM_URL} target="_blank" rel="noopener" class="nav-tg">Comunidad gratis en Telegram →</a>
     </nav>
 
     <div class="actions">
-      <a href="/shop#cart" class="cart-btn" aria-label="Carrito" data-cart-open>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><path d="M3 6h18" /><path d="M16 10a4 4 0 0 1-8 0" />
-        </svg>
-        <span class="cart-count" data-cart-count>0</span>
-      </a>
-      <a href="/newsletter#suscribirse" class="btn btn-primary join">Únete</a>
+      <a href={TELEGRAM_URL} target="_blank" rel="noopener" class="btn btn-primary join">Únete gratis</a>
       <button class="burger" id="burger" aria-label="Menú" aria-expanded="false">
         <span></span><span></span>
       </button>
@@ -92,34 +89,18 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
     align-items: center;
     gap: 0.6rem;
   }
-  .cart-btn {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 1px solid var(--border);
-    color: var(--text);
-    transition: border-color 0.2s;
-  }
-  .cart-btn:hover {
-    border-color: var(--brand);
-  }
-  .cart-count {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    min-width: 18px;
-    height: 18px;
-    padding: 0 4px;
+  .badge {
+    margin-left: 0.35rem;
+    padding: 0.05rem 0.4rem;
     border-radius: 999px;
-    background: var(--brand);
-    color: #ffffff;
-    font-size: 0.7rem;
-    font-weight: 700;
-    display: grid;
-    place-items: center;
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    background: rgba(139, 61, 255, 0.18);
+    color: var(--accent);
+  }
+  .nav-tg {
+    display: none;
   }
   .join {
     padding: 0.6rem 1.1rem;
@@ -181,6 +162,11 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
     .nav a {
       padding: 0.8rem 1rem;
     }
+    .nav .nav-tg {
+      display: block;
+      color: var(--brand);
+      font-weight: 600;
+    }
   }
 </style>
 
@@ -197,13 +183,4 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
     burger.setAttribute('aria-expanded', String(open));
   });
 
-  const updateCount = () => {
-    try {
-      const cart = JSON.parse(localStorage.getItem('zx-cart') || '[]') as { qty: number }[];
-      const n = cart.reduce((s, i) => s + i.qty, 0);
-      document.querySelectorAll('[data-cart-count]').forEach((el) => (el.textContent = String(n)));
-    } catch {}
-  };
-  updateCount();
-  window.addEventListener('cart:update', updateCount);
 </script>

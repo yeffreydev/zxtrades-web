@@ -15,15 +15,19 @@ const guias = defineCollection({
   }),
 });
 
-const newsletter = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/newsletter' }),
+/**
+ * Blog diario. Para publicar: crea `src/content/blog/AAAA-MM-DD-titulo.md`
+ * con este frontmatter y escribe el post en Markdown debajo.
+ */
+const blog = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
   schema: z.object({
     title: z.string(),
-    issue: z.number(),
     summary: z.string(),
     pubDate: z.coerce.date(),
     tags: z.array(z.string()).default([]),
+    draft: z.boolean().default(false),
   }),
 });
 
-export const collections = { guias, newsletter };
+export const collections = { guias, blog };
