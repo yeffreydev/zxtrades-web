@@ -1,6 +1,6 @@
 ---
 title: "Vacíos de liquidez: la mecha solita y el limit en el 50%"
-summary: Cuando el precio deja una mecha larga, cruzó esa zona casi sin negociar. Eso es un vacío de liquidez. Te explicamos por qué el precio suele volver a la mitad de la mecha y por qué estas mechas pesan más en Londres y Nueva York.
+summary: Cuando el precio deja una mecha larga, cruzó esa zona casi sin negociar. Eso es un vacío de liquidez. Te explicamos por qué el precio suele volver a la mitad de la mecha, dónde poner el TP, cómo sacar parciales y por qué estas mechas pesan más en Londres y Nueva York.
 pubDate: 2026-11-09
 tags: [Educación, Liquidez, Sesiones]
 ---
@@ -9,7 +9,7 @@ Hola trader 👋
 
 Hoy hablamos de algo que vas a ver todos los días en el gráfico del oro y casi nadie aprovecha: **las mechas largas**. Esa mecha "solita", la que se estira lejos del cuerpo, no es ruido. Es un **vacío de liquidez**, y su **50%** es uno de los niveles más limpios para poner una orden limit.
 
-![Vacío de liquidez: la mecha solita en el extremo y en continuación, con el limit en el 50% de la mecha](/blog/vacio-de-liquidez-mecha-50.svg)
+![Vacío de liquidez: la mecha solita en el extremo y en continuación, con el limit en el 50% de la mecha, parciales y TP en el siguiente punto de interés](/blog/vacio-de-liquidez-mecha-50.svg)
 
 ## ¿Qué es un vacío de liquidez?
 
@@ -36,6 +36,29 @@ Muchas veces el precio no vuelve a llenar toda la mecha: regresa **hasta la mita
 
 - Mecha **de abajo** (compras): del **mínimo del cuerpo** a la **punta inferior** de la mecha. Limit de compra en el 50%, stop debajo de la punta.
 - Mecha **de arriba** (ventas): del **máximo del cuerpo** a la **punta superior** de la mecha. Limit de venta en el 50%, stop encima de la punta.
+
+## ¿Dónde va el TP? En el siguiente punto de interés
+
+El objetivo no es un número al azar. El **TP va en el siguiente punto de interés**: el próximo lugar donde el precio tiene algo que buscar o donde puede frenar.
+
+- Un **máximo o mínimo previo** (ahí descansan stops: es liquidez).
+- Otro **vacío** o mecha sin equilibrar en la dirección de la operación.
+- El **máximo o mínimo de la sesión** anterior o de Asia.
+
+Como entras en el 50% de la mecha con el stop detrás de su punta, el riesgo es pequeño y el siguiente punto de interés suele quedar a **1:3, 1:4 o más**. Ahí está la ventaja.
+
+## Parciales: así se le gana al mercado
+
+No hace falta acertar siempre. Hace falta que **lo que ganas sea mucho más grande que lo que pierdes**. Con ratio 1:3 puedes perder la mitad de tus operaciones y seguir en ganancia.
+
+Para no devolver lo ganado en el camino, **ve sacando parciales**:
+
+1. **Parcial 1 en 1:2.** Cierra una parte de la posición (por ejemplo, 50%) y asegura ganancia.
+2. **Mueve el stop a break even** (al precio de entrada). Desde aquí la operación ya no puede costarte dinero.
+3. **Parcial 2 en 1:3** si el recorrido lo permite.
+4. **El resto corre hasta el siguiente punto de interés.** Si llega, esa parte paga la operación completa.
+
+Así combinas lo mejor de los dos lados: aseguras dinero pronto y dejas una parte buscando el movimiento grande.
 
 ## Dos lugares donde aparece la mecha
 
@@ -67,14 +90,16 @@ Regla simple: **prioriza las mechas que se forman en Londres y Nueva York**, en 
 - **Marcar cualquier mecha.** Busca mechas **claramente más largas** que las velas de alrededor. Una mecha normal no es un vacío.
 - **Entrar sin contexto.** En el extremo, la mecha debe barrer liquidez. En continuación, debe ir a favor de la tendencia. Sin eso, el 50% es solo una línea.
 - **Mover el stop.** Si el precio rompe la punta de la mecha, la idea falló. Acepta la pérdida pequeña.
+- **No sacar parciales.** Ver una operación en 1:2 volver al stop duele. Asegura una parte y protege el resto.
 - **Esperar el 100%.** No todas las mechas vuelven a su 50%. Si se va sin ti, déjala ir. Habrá otra en la siguiente sesión.
 
 ## Cómo practicarlo desde hoy
 
 1. Abre el oro en 15 minutos y marca las **mechas largas** de las aperturas de Londres y Nueva York.
 2. Traza el **50%** de cada una.
-3. Mira cuántas veces el precio volvió a esa línea y reaccionó.
-4. Anota en tu journal si la mecha fue **en el extremo** o **en continuación** y qué pasó.
+3. Marca el **siguiente punto de interés** y calcula el ratio desde el 50% con el stop detrás de la punta.
+4. Mira cuántas veces el precio volvió a esa línea y hasta qué parcial habría llegado.
+5. Anota en tu journal si la mecha fue **en el extremo** o **en continuación** y qué pasó.
 
 > El cuerpo te dice dónde se negoció. La mecha te dice dónde el mercado tiene una cuenta pendiente.
 
