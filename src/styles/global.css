@@ -252,6 +252,15 @@ h4 {
   font-size: 0.9em;
 }
 
+.prose img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 2rem 0;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+
 .prose blockquote {
   margin: 2rem 0;
   padding: 1rem 1.5rem;
